@@ -1,0 +1,40 @@
+#! /bin/sh
+
+# Ejecuta polybar
+$HOME/.config/polybar/launch.sh
+
+# Ejecuta los atajos de teclado. No va bien, siempre hay que
+# hacer "super + Esc" al iniciar sesión.
+pgrep -x sxhkd > /dev/null || sxhkd &
+
+# Cambia la resolucion
+xrandr --output eDP --primary --mode 1366x768  --rotate normal --output DisplayPort-0 --mode 1440x900  --rotate normal --above eDP
+
+# Hace que la cruz negra del cursor sea siempre la flecha
+xsetroot -cursor_name left_ptr
+
+xrdb -merge ~/.Xresources
+
+# Restaura el fondo de pantalla
+nitrogen --restore &
+
+# Inicia las trasparencias
+picom -f &
+
+#bspc monitor eDP -d I II III IV V
+#bspc monitor DisplayPort-0 -d VI VII VIII IX X
+
+# Asigna a cada pantalla un número de escritorios
+bspc monitor DisplayPort-0 -d I II III IV V
+bspc monitor eDP -d VI VII VIII IX X
+
+bspc config border_width 2 bspc config window_gap 12
+
+bspc config split_ratio 0.52 bspc config 
+borderless_monocle true bspc config gapless_monocle 
+true
+
+bspc rule -a Gimp desktop='^8' state=floating follow=on 
+bspc rule -a Chromium desktop='^2' bspc rule -a 
+mplayer2 state=floating bspc rule -a Kupfer.py focus=on 
+bspc rule -a Screenkey manage=off
